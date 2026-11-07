@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airtel SYNC · Stadium Surge Digital Twin & O-RAN Near-RT RIC</title>
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --panel-bg: #121826;
+      --card-bg: #1a2234;
+      --border-color: #26324a;
+      --airtel-red: #ea0000;
+      --airtel-red-glow: rgba(234, 0, 0, 0.4);
+      --accent-cyan: #00d2ff;
+      --accent-green: #00e676;
+      --accent-yellow: #ffb300;
+      --accent-orange: #ff9100;
+      --text-main: #f0f4fc;
+      --text-muted: #8c9ba5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, #101522 0%, #1c0e14 100%);
+      border-bottom: 2px solid var(--airtel-red);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      background: var(--airtel-red);
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 12px var(--airtel-red-glow);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 230, 118, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.4;
+      }
+    }
+
+    /* Layout */
+    .app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 65px);
+    }
+
+    .sidebar {
+      width: 340px;
+      background-color: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 18px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Sidebar Widgets */
+    .control-group {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .control-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .preset-btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .btn-preset {
+      background: #232c40;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 7px 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .btn-preset:hover {
+      background: #2f3b55;
+      border-color: var(--accent-cyan);
+    }
+
+    .btn-preset.active {
+      background: var(--airtel-red);
+      border-color: var(--airtel-red);
+      color: #fff;
+      box-shadow: 0 0 8px var(--airtel-red-glow);
+    }
+
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+
+    .slider-val {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--airtel-red);
+      cursor: pointer;
+    }
+
+    .phase-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .phase-radio-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #141b2a;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .phase-radio-label:hover {
+      background: #1c263c;
+    }
+
+    .phase-radio-label input {
+      accent-color: var(--airtel-red);
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .toggle-item:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-item input[type=checkbox] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-green);
+      cursor: pointer;
+      margin-top: 2px;
+    }
+
+    .toggle-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .toggle-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .toggle-desc {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    .btn-emergency {
+      background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 0 10px rgba(211, 47, 47, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-emergency:hover {
+      background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+    }
+
+    /* Top KPI Row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-cyan);
+    }
+
+    .kpi-card.good::before {
+      background: var(--accent-green);
+    }
+
+    .kpi-card.warn::before {
+      background: var(--accent-yellow);
+    }
+
+    .kpi-card.alert::before {
+      background: var(--airtel-red);
+    }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .kpi-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .sub-good {
+      color: var(--accent-green);
+    }
+
+    .sub-bad {
+      color: #ff5252;
+    }
+
+    /* Tabs Navigation */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px 6px 0 0;
+      position: relative;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+    }
+
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--airtel-red);
+    }
+
+    /* Tab Content Area */
+    .tab-pane {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .tab-pane.active {
+      display: flex;
+    }
+
+    /* Map Layout */
+    .radar-wrapper {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      flex: 1;
+      min-height: 520px;
+    }
+
+    .radar-canvas-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .map-legend {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(10, 14, 23, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.72rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-box {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    .ai-insights-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+    }
+
+    .insight-card {
+      background: #141b2a;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 0.78rem;
+    }
+
+    .insight-card.alert {
+      border-left-color: var(--airtel-red);
+    }
+
+    .insight-card.success {
+      border-left-color: var(--accent-green);
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table th {
+      background: #101624;
+      color: var(--accent-cyan);
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e0e8f5;
+    }
+
+    .data-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .cell-tag {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .tag-green {
+      background: rgba(0, 230, 118, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    .tag-yellow {
+      background: rgba(255, 179, 0, 0.15);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(255, 179, 0, 0.3);
+    }
+
+    .tag-red {
+      background: rgba(234, 0, 0, 0.15);
+      color: #ff5252;
+      border: 1px solid rgba(234, 0, 0, 0.3);
+    }
+
+    /* Event Log Stream */
+    .log-stream {
+      background: #0d121c;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+      height: 380px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .log-line {
+      line-height: 1.4;
+    }
+
+    .log-time {
+      color: var(--text-muted);
+    }
+
+    .log-xapp {
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    .log-info {
+      color: #a5d6a7;
+    }
+
+    .log-warn {
+      color: #ffe082;
+    }
+
+    .log-crit {
+      color: #ff8a80;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  
+  <header>
+    <div class="brand">
+      <div class="brand-logo">airtel SYNC</div>
+      <div>
+        <div class="brand-title">Stadium Surge Digital Twin & O-RAN Near-RT RIC Simulator</div>
+        <div class="brand-subtitle">Cricket World Cup Final · 1,00,000 Seats · 60-Day SLA Delivery · CapEx: ₹4.00 Crore · Made by NIT Nagpur Final Year Students</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <div class="status-badge" style="background:rgba(0, 210, 255, 0.1); color:var(--accent-cyan); border-color:rgba(0, 210, 255, 0.3);">
+        <span>Made by NIT Nagpur Final Year Students</span>
+      </div>
+      <div class="status-badge">
+        <span class="pulse-dot"></span>
+        <span>O-RAN Near-RT RIC Active | E2 Synchronized</span>
+      </div>
+    </div>
+  </header>
+
+  
+  <div class="app-container">
+
+    
+    <aside class="sidebar">
+
+      
+      <img src="assets/image2.jpg" alt="Airtel SYNC" style="width:100%; border-radius:6px; margin-bottom:4px; border:1px solid var(--border-color);">
+
+      
+      <div class="control-group">
+        <div class="control-title">
+          <span>Quick Scenarios</span>
+          <span style="font-size:0.7rem; color:var(--text-muted);">Slide 7 Presets</span>
+        </div>
+        <div class="preset-btn-group">
+          <button class="btn-preset" id="btn-p-65k" onclick="applyPreset('65k')">65k Choke</button>
+          <button class="btn-preset" id="btn-p-100k-base" onclick="applyPreset('100k_base')">100k Base</button>
+          <button class="btn-preset active" id="btn-p-100k-sync" onclick="applyPreset('100k_sync')">100k SYNC</button>
+        </div>
+      </div>
+
+      
+      <div class="control-group">
+        <div class="slider-container">
+          <div class="slider-header">
+            <span>Stadium Attendance:</span>
+            <span class="slider-val" id="disp-attendance">1,00,000 Fans</span>
+          </div>
+          <input type="range" id="input-attendance" min="50000" max="100000" step="5000" value="100000"
+            oninput="onParamsChange()">
+          <div
+            style="display:flex; justify-content:space-between; font-size:0.68rem; color:var(--text-muted); margin-top:2px;">
+            <span>50,000</span>
+            <span>65,000 (Prev)</span>
+            <span>1,00,000 (Final)</span>
+          </div>
+        </div>
+
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">
+          Airtel Crowd (40%): <b id="disp-airtel-users" style="color:#fff;">40,000</b><br>
+          Concurrent Active (18%): <b id="disp-active-users" style="color:var(--accent-cyan);">7,200</b>
+        </div>
+      </div>
+
+      
+      <div class="control-group">
+        <div class="control-title">Match Phase (Sheet sync)</div>
+        <div class="phase-selector">
+          <label class="phase-radio-label">
+            <input type="radio" name="phase" value="17:00" onchange="onParamsChange()">
+            <span><b>17:00</b> · Crowd Building Up (Gates Open)</span>
+          </label>
+          <label class="phase-radio-label">
+            <input type="radio" name="phase" value="21:00" checked onchange="onParamsChange()">
+            <span><b>21:00</b> · Innings Break (Peak Choke / Food Court)</span>
+          </label>
+          <label class="phase-radio-label">
+            <input type="radio" name="phase" value="22:45" onchange="onParamsChange()">
+            <span><b>22:45</b> · Final Over (Viral Video / Uplink Peak)</span>
+          </label>
+          <label class="phase-radio-label">
+            <input type="radio" name="phase" value="23:15" onchange="onParamsChange()">
+            <span><b>23:15</b> · Post-Match (Crowd Dispersal & Egress)</span>
+          </label>
+        </div>
+      </div>
+
+      
+      <div class="control-group">
+        <div class="control-title">Closed-Loop O-RAN Levers</div>
+
+        <div class="toggle-item">
+          <input type="checkbox" id="chk-capex" checked onchange="onParamsChange()">
+          <div class="toggle-info">
+            <span class="toggle-name">1. CapEx Expansion (₹3.87 Cr)</span>
+            <span class="toggle-desc">+14 Small Cells + 4 CoWs + 2.4km 10G Fibre + M6 Re-tilt</span>
+          </div>
+        </div>
+
+        <div class="toggle-item">
+          <input type="checkbox" id="chk-sig" checked onchange="onParamsChange()">
+          <div class="toggle-info">
+            <span class="toggle-name">2. 5G SA + Multi-Band Anchor</span>
+            <span class="toggle-desc">5G SA Option 2 + B1/B3/B40 Anchors + 15% PDCCH Reserve</span>
+          </div>
+        </div>
+
+        <div class="toggle-item">
+          <input type="checkbox" id="chk-qos" checked onchange="onParamsChange()">
+          <div class="toggle-info">
+            <span class="toggle-name">3. UPI Slicing & Dynamic TDD 6:4</span>
+            <span class="toggle-desc">QCI 6 / 5QI 7 Merchant Slice + TDD 6:4 + ARP-1 112 Protection</span>
+          </div>
+        </div>
+      </div>
+
+      
+      <button class="btn-emergency" onclick="triggerEmergencyCall()">
+        <span>Execute 112 Emergency Pre-emption</span>
+      </button>
+
+      <div style="margin-top:auto; padding-top:14px; text-align:center; border-top:1px solid var(--border-color); font-size:0.75rem; color:var(--accent-cyan); font-weight:600; letter-spacing:0.3px;">
+        Made by NIT Nagpur Final Year Students
+      </div>
+
+    </aside>
+
+    
+    <main class="main-content">
+
+      
+      <div class="kpi-row">
+
+        <div class="kpi-card good" id="kpi-5g-speed-card">
+          <div class="kpi-label">5G User Speed (SLA ≥ 5)</div>
+          <div class="kpi-value" id="kpi-5g-speed">8.33 Mbps</div>
+          <div class="kpi-sub sub-good" id="kpi-5g-speed-sub">+3.33 Mbps vs SLA</div>
+        </div>
+
+        <div class="kpi-card good" id="kpi-4g-speed-card">
+          <div class="kpi-label">4G User Speed (SLA ≥ 3)</div>
+          <div class="kpi-value" id="kpi-4g-speed">3.85 Mbps</div>
+          <div class="kpi-sub sub-good" id="kpi-4g-speed-sub">+0.85 Mbps vs SLA</div>
+        </div>
+
+        <div class="kpi-card good" id="kpi-5g-success-card">
+          <div class="kpi-label">5G Connection Success</div>
+          <div class="kpi-value" id="kpi-5g-success">99.4%</div>
+          <div class="kpi-sub sub-good" id="kpi-5g-success-sub">+4.4% vs 95% SLA</div>
+        </div>
+
+        <div class="kpi-card good" id="kpi-upi-card">
+          <div class="kpi-label">Food-Stall UPI Failures</div>
+          <div class="kpi-value" id="kpi-upi-fail">0.42%</div>
+          <div class="kpi-sub sub-good" id="kpi-upi-sub">-14.38% vs baseline</div>
+        </div>
+
+        <div class="kpi-card good" id="kpi-prb-card">
+          <div class="kpi-label">Average PRB Load</div>
+          <div class="kpi-value" id="kpi-prb-load">76.2%</div>
+          <div class="kpi-sub sub-good" id="kpi-prb-sub">23.8% Headroom (<80%)< /div>
+          </div>
+
+          <div class="kpi-card good" id="kpi-capex-card">
+            <div class="kpi-label">CapEx Spent / Budget</div>
+            <div class="kpi-value" id="kpi-capex">₹3.87 Cr</div>
+            <div class="kpi-sub sub-good" id="kpi-capex-sub">Buffer: ₹13.0 Lakhs</div>
+          </div>
+
+        </div>
+
+        
+        <div class="nav-tabs">
+          <button class="tab-btn active" onclick="switchTab('tab-radar')">Venue Radar & Topology</button>
+          <button class="tab-btn" onclick="switchTab('tab-benchmark')">Master Forensic Benchmark</button>
+          <button class="tab-btn" onclick="switchTab('tab-cells')">26-Cell Live Telemetry</button>
+          <button class="tab-btn" onclick="switchTab('tab-ric')">O-RAN Near-RT RIC xApps & 112 Trace</button>
+          <button class="tab-btn" onclick="switchTab('tab-bom')">CapEx BOM Breakdown</button>
+          <button class="tab-btn" onclick="switchTab('tab-hardware')">Physical Hardware & Venue Architecture</button>
+        </div>
+
+        
+        <div class="tab-pane active" id="tab-radar">
+          <div class="radar-wrapper">
+
+            <div class="radar-canvas-card">
+              <div style="display:flex; justify-content:space-between; width:100%; align-items:center; margin-bottom:8px;">
+                <span style="font-size:0.8rem; font-weight:700; color:var(--text-main);">Spatial Topology & Interactive Beam Cones</span>
+                <div style="display:flex; gap:6px;">
+                  <button id="btn-play-timeline" class="btn-preset" style="padding:4px 10px;" onclick="togglePlayTimeline()">Play Match Timeline</button>
+                </div>
+              </div>
+              
+              <canvas id="stadiumCanvas" width="620" height="480" style="cursor:pointer;"></canvas>
+
+              <div id="cell-inspector-panel" style="width:100%; margin-top:8px; background:#141b2a; border:1px solid var(--border-color); border-radius:6px; padding:10px; font-size:0.75rem;">
+                <span style="color:var(--text-muted);">Click on any cell marker (M1-M6, S1-S2, SC-01 to SC-14, COW-1 to COW-4) on the radar to inspect its sector parameters, beam radiation cone, and backhaul link.</span>
+              </div>
+
+              <div class="map-legend">
+                <div class="legend-item"><span class="legend-box" style="background:#00e676;"></span> Optimal (< 80%
+                    Load)</div>
+                    <div class="legend-item"><span class="legend-box" style="background:#ffeb3b;"></span> Heavy (80 -
+                      90% Load)</div>
+                    <div class="legend-item"><span class="legend-box" style="background:#ff1744;"></span> Congested (>
+                      90% Load)</div>
+                    <div class="legend-item"><span class="legend-box"
+                        style="border:1px dashed #00d2ff; background:transparent;"></span> Ring 1: Seating Bowl (80m)
+                    </div>
+                    <div class="legend-item"><span class="legend-box"
+                        style="border:1px dashed #ab47bc; background:transparent;"></span> Ring 2: Concourse / Food
+                      (150m)</div>
+                    <div class="legend-item"><span class="legend-box"
+                        style="border:1px solid #78909c; background:transparent;"></span> Ring 3: Outer Macros (450m)
+                    </div>
+                </div>
+              </div>
+
+              <div class="ai-insights-panel">
+                <h4 style="color:var(--accent-cyan); font-size:0.9rem;">Spatio-Temporal Machine Learning Engine</h4>
+
+                <div class="insight-card" id="ai-active-cluster-card">
+                  <b>DBSCAN Spatial Hotspot Detection</b><br>
+                  <div id="ai-cluster-text" style="margin-top:4px;">
+                    Detected 4 high-density clusters in Concourse Food Ring (140m). Horn antennas dynamically steered
+                    with 30° mechanical downtilt.
+                  </div>
+                </div>
+
+                <div class="insight-card success" id="ai-forecast-card">
+                  <b>15-Minute Temporal Surge Forecaster</b><br>
+                  <div id="ai-forecast-text" style="margin-top:4px;">
+                    Phase: <b>21:00 Innings Break</b><br>
+                    Next Event: 2nd Innings Resumption (21:30)<br>
+                    Concourse Surge Risk: <b style="color:var(--airtel-red);">CRITICAL</b><br>
+                    O-RAN Action: Pre-allocated Concourse Small Cell PRBs & activated QCI 6 UPI Slice.
+                  </div>
+                </div>
+
+                <div class="insight-card" style="border-left-color:var(--accent-green);">
+                  <b>RF Interference Mitigation (Task 4)</b><br>
+                  <ul style="padding-left:16px; margin-top:4px; font-size:0.74rem;">
+                    <li><b>30° × 30° Stadium Horns:</b> Confines small cell footprint to one seating block.</li>
+                    <li><b>Outer Sector Muting:</b> Macro antennas tilted away from inner bowl.</li>
+                    <li><b>Dynamic TDD 6:4:</b> Doubles uplink slots during viral video surges.</li>
+                    <li><b>C-RAN Pooling:</b> Eliminates concourse handover ping-pong drops.</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-benchmark">
+            <h3 style="font-size:1rem; color:#fff;">Master Forensic Benchmark: 65k Match vs 100k Baseline vs 100k SYNC
+              Solution</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Exact replication and calibration of Slide 7
+              Validation Matrix @ 21:00 Innings-Break Peak</p>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Stadium KPI (at 21:00 peak)</th>
+                  <th>Last Match (65,000 Fans)</th>
+                  <th>100,000 Fans Baseline (Do Nothing)</th>
+                  <th>100,000 Fans with SYNC Solution</th>
+                  <th>Engineering Basis / SLA Rationale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Peak Concurrent Active Users</b></td>
+                  <td>4,680 users</td>
+                  <td>7,200 users</td>
+                  <td><b style="color:var(--accent-cyan);">7,200 users</b></td>
+                  <td>1,00,000 × 40% Airtel × 18% concurrency</td>
+                </tr>
+                <tr>
+                  <td><b>Average Cell PRB Load</b></td>
+                  <td><span class="cell-tag tag-red">98.5% (Choked)</span></td>
+                  <td><span class="cell-tag tag-red">100.0% (Collapse)</span></td>
+                  <td><span class="cell-tag tag-green">76.2% (Headroom OK)</span></td>
+                  <td>20% PRB queueing headroom cap</td>
+                </tr>
+                <tr>
+                  <td><b>Site M6 PRB Load (Reclaimed)</b></td>
+                  <td>60.5% (Wasted Azimuth)</td>
+                  <td>64.2% (Underutilized)</td>
+                  <td><span class="cell-tag tag-green">78.0% (Rebalanced)</span></td>
+                  <td>Reclaimed via 25° downtilt to upper bowl</td>
+                </tr>
+                <tr>
+                  <td><b>5G Connection Success Rate</b></td>
+                  <td><span class="cell-tag tag-red">35.8%</span></td>
+                  <td><span class="cell-tag tag-red">21.4%</span></td>
+                  <td><span class="cell-tag tag-green">99.4%</span></td>
+                  <td>5G SA Option 2 + Multi-Band EN-DC Anchors</td>
+                </tr>
+                <tr>
+                  <td><b>Average 5G User Speed</b></td>
+                  <td>28.4 Mbps (Unconnected drop)</td>
+                  <td><span class="cell-tag tag-red">1.8 Mbps</span></td>
+                  <td><span class="cell-tag tag-green">8.33 Mbps</span></td>
+                  <td>Target SLA: ≥ 5.0 Mbps</td>
+                </tr>
+                <tr>
+                  <td><b>Average 4G User Speed</b></td>
+                  <td><span class="cell-tag tag-red">1.0 Mbps</span></td>
+                  <td><span class="cell-tag tag-red">0.4 Mbps</span></td>
+                  <td><span class="cell-tag tag-green">3.85 Mbps</span></td>
+                  <td>Target SLA: ≥ 3.0 Mbps</td>
+                </tr>
+                <tr>
+                  <td><b>Food-Stall UPI Failure Rate</b></td>
+                  <td><span class="cell-tag tag-red">7.11%</span></td>
+                  <td><span class="cell-tag tag-red">14.80%</span></td>
+                  <td><span class="cell-tag tag-green">0.42%</span></td>
+                  <td>5QI 7 / QCI 6 Merchant Slicing + EDT</td>
+                </tr>
+                <tr>
+                  <td><b>Extra 5G Cells Added</b></td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td><b style="color:#fff;">+8 Cells (12 Total)</b></td>
+                  <td>64T64R MU-MIMO (26.25 bps/Hz)</td>
+                </tr>
+                <tr>
+                  <td><b>Extra 4G Cells Added</b></td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td><b style="color:#fff;">+14 Cells (22 Total)</b></td>
+                  <td>3CC CA + 4x4 MIMO (5.50 bps/Hz)</td>
+                </tr>
+                <tr>
+                  <td><b>CapEx Utilised / Budget</b></td>
+                  <td>₹0.00 Cr</td>
+                  <td>₹0.00 Cr</td>
+                  <td><b style="color:var(--accent-green);">₹3.87 Cr / ₹4.00 Cr</b></td>
+                  <td>₹13.0 Lakh contingency buffer preserved</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+              
+              <div class="control-group">
+                <img src="assets/catwalk_small_cell.jpg" alt="Catwalk Small Cell & 30-deg Horn Antenna" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-green);">Catwalk Dual-Mode 4G/5G Small Cell & 30° Horn</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Remote Radio Unit (RRU) supporting 4G (B3/B1/B40) and 5G n78 (100 MHz TDD) coupled to a 30° x 30° narrow-beam directional horn antenna with steep 25°–35° mechanical downtilt to eliminate co-channel RF overlap.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/cell_on_wheels.jpg" alt="Cell on Wheels (CoW)" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-yellow);">Multi-Sector Cell on Wheels (CoW) Mobile Mast</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Rapid-deployment 30m hydraulic telescopic mast with multi-band sector antennas, on-board power generation, and dual 10G optical fiber links deployed at Gates 1, 3, 5, 7.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/oran_datacenter.jpg" alt="O-RAN Near-RT RIC Datacenter" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">O-RAN Near-RT RIC & Centralized C-RAN BBU Hub</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Centralized Cloud-RAN baseband pooling running near-real-time closed-loop xApps (Traffic Steering, UPI Slicing, Dynamic TDD, ARP-1 Admission Control) interconnected via 10 Gbps DWDM optical rings.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-hardware">
+            <h3 style="font-size:1rem; color:#fff;">Physical Hardware Deployments & Venue Architecture</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Real-world engineering photography and technical specifications of the proposed network infrastructure</p>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:8px;">
+              <div class="control-group">
+                <img src="assets/stadium_aerial.jpg" alt="100,000-Seat Stadium Venue Layout" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">1,00,000-Seat Stadium Venue Architecture</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Concentric 3-Ring Topography: Ring 1 (Inner Bowl 80m catwalk), Ring 2 (Concourse & Food Plazas 150m), and Ring 3 (Outer Perimeter Macros 300-450m).
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <img src="assets/catwalk_small_cell.jpg" alt="Catwalk Small Cell & 30-deg Horn Antenna" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-green);">Catwalk Dual-Mode 4G/5G Small Cell & 30° Horn</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Remote Radio Unit (RRU) supporting 4G (B3/B1/B40) and 5G n78 (100 MHz TDD) coupled to a 30° x 30° narrow-beam directional horn antenna with steep 25°–35° mechanical downtilt to eliminate co-channel RF overlap.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/cell_on_wheels.jpg" alt="Cell on Wheels (CoW)" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-yellow);">Multi-Sector Cell on Wheels (CoW) Mobile Mast</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Rapid-deployment 30m hydraulic telescopic mast with multi-band sector antennas, on-board power generation, and dual 10G optical fiber links deployed at Gates 1, 3, 5, 7.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/oran_datacenter.jpg" alt="O-RAN Near-RT RIC Datacenter" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">O-RAN Near-RT RIC & Centralized C-RAN BBU Hub</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Centralized Cloud-RAN baseband pooling running near-real-time closed-loop xApps (Traffic Steering, UPI Slicing, Dynamic TDD, ARP-1 Admission Control) interconnected via 10 Gbps DWDM optical rings.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-cells">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="font-size:1rem; color:#fff;">Live Telemetry for All 26 Stadium-Facing Cells</h3>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Real-time O-RAN E2 Baseband Metrics</span>
+            </div>
+            <table class="data-table" id="table-cell-telemetry">
+              <thead>
+                <tr>
+                  <th>Cell ID</th>
+                  <th>Sector Name</th>
+                  <th>Type</th>
+                  <th>Ring & Distance</th>
+                  <th>5G (n78)</th>
+                  <th>Backhaul Link</th>
+                  <th>PRB Load %</th>
+                  <th>Active Users</th>
+                  <th>Health Status</th>
+                </tr>
+              </thead>
+              <tbody id="table-cell-body">
+                
+              </tbody>
+            </table>
+          </div>
+              
+              <div class="control-group">
+                <img src="assets/catwalk_small_cell.jpg" alt="Catwalk Small Cell & 30-deg Horn Antenna" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-green);">Catwalk Dual-Mode 4G/5G Small Cell & 30° Horn</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Remote Radio Unit (RRU) supporting 4G (B3/B1/B40) and 5G n78 (100 MHz TDD) coupled to a 30° x 30° narrow-beam directional horn antenna with steep 25°–35° mechanical downtilt to eliminate co-channel RF overlap.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/cell_on_wheels.jpg" alt="Cell on Wheels (CoW)" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-yellow);">Multi-Sector Cell on Wheels (CoW) Mobile Mast</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Rapid-deployment 30m hydraulic telescopic mast with multi-band sector antennas, on-board power generation, and dual 10G optical fiber links deployed at Gates 1, 3, 5, 7.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/oran_datacenter.jpg" alt="O-RAN Near-RT RIC Datacenter" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">O-RAN Near-RT RIC & Centralized C-RAN BBU Hub</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Centralized Cloud-RAN baseband pooling running near-real-time closed-loop xApps (Traffic Steering, UPI Slicing, Dynamic TDD, ARP-1 Admission Control) interconnected via 10 Gbps DWDM optical rings.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-hardware">
+            <h3 style="font-size:1rem; color:#fff;">Physical Hardware Deployments & Venue Architecture</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Real-world engineering photography and technical specifications of the proposed network infrastructure</p>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:8px;">
+              <div class="control-group">
+                <img src="assets/stadium_aerial.jpg" alt="100,000-Seat Stadium Venue Layout" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">1,00,000-Seat Stadium Venue Architecture</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Concentric 3-Ring Topography: Ring 1 (Inner Bowl 80m catwalk), Ring 2 (Concourse & Food Plazas 150m), and Ring 3 (Outer Perimeter Macros 300-450m).
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <img src="assets/catwalk_small_cell.jpg" alt="Catwalk Small Cell & 30-deg Horn Antenna" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-green);">Catwalk Dual-Mode 4G/5G Small Cell & 30° Horn</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Remote Radio Unit (RRU) supporting 4G (B3/B1/B40) and 5G n78 (100 MHz TDD) coupled to a 30° x 30° narrow-beam directional horn antenna with steep 25°–35° mechanical downtilt to eliminate co-channel RF overlap.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/cell_on_wheels.jpg" alt="Cell on Wheels (CoW)" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-yellow);">Multi-Sector Cell on Wheels (CoW) Mobile Mast</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Rapid-deployment 30m hydraulic telescopic mast with multi-band sector antennas, on-board power generation, and dual 10G optical fiber links deployed at Gates 1, 3, 5, 7.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/oran_datacenter.jpg" alt="O-RAN Near-RT RIC Datacenter" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">O-RAN Near-RT RIC & Centralized C-RAN BBU Hub</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Centralized Cloud-RAN baseband pooling running near-real-time closed-loop xApps (Traffic Steering, UPI Slicing, Dynamic TDD, ARP-1 Admission Control) interconnected via 10 Gbps DWDM optical rings.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-ric">
+            <h3 style="font-size:1rem; color:#fff;">O-RAN Near-RT RIC xApp Execution Log & 112 Trace</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Live E2 message bus logging xApp policy decisions and
+              3GPP ARP Level 1 emergency call pre-emptions.</p>
+
+            <div class="log-stream" id="ric-log-stream">
+              
+            </div>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-bom">
+            <h3 style="font-size:1rem; color:#fff;">CapEx Bill of Materials (BOM) & Architectural Summary</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Strictly optimized to meet all SLA targets within the
+              ₹4.00 Crore budget ceiling</p>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Subsystem / Item</th>
+                  <th>Target Location / Role</th>
+                  <th>Quantity</th>
+                  <th>Unit Cost</th>
+                  <th>Total Cost (INR Lakhs)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>In-Bowl Dual-Mode Small Cells (4G+5G)</b></td>
+                  <td>Roof canopy catwalk (80m ring) + S1, S2 upgrade</td>
+                  <td>14 units</td>
+                  <td>₹8.0 Lakh</td>
+                  <td><b style="color:#fff;">112.0 L</b></td>
+                </tr>
+                <tr>
+                  <td><b>Multi-Sector Cells on Wheels (CoWs)</b></td>
+                  <td>Entry gates, fan plaza, food-court corridors</td>
+                  <td>4 CoWs</td>
+                  <td>₹25.0 Lakh/event</td>
+                  <td><b style="color:#fff;">100.0 L</b></td>
+                </tr>
+                <tr>
+                  <td><b>10G Optical Fibre Backhaul Expansion</b></td>
+                  <td>M4 (0.38km), M6 (0.45km) + in-bowl ring (1.57km)</td>
+                  <td>2.40 km</td>
+                  <td>₹50.0 Lakh/km</td>
+                  <td><b style="color:#fff;">120.0 L</b></td>
+                </tr>
+                <tr>
+                  <td><b>Macro 5G Upgrades + Re-tilt + Core QoS</b></td>
+                  <td>2x n78 AAUs (32L) + 5G SA core & QoS licences (23L)</td>
+                  <td>2 sites + Core</td>
+                  <td>₹55.0 Lakh lump</td>
+                  <td><b style="color:#fff;">55.0 L</b></td>
+                </tr>
+                <tr style="background:rgba(0, 230, 118, 0.08);">
+                  <td><b style="color:var(--accent-green);">Contingency Operational Buffer</b></td>
+                  <td>Reserve for deployment overages and on-site tuning</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td><b style="color:var(--accent-green);">13.0 L</b></td>
+                </tr>
+                <tr style="background:#161d2c; font-size:0.88rem;">
+                  <td colspan="4"><b>TOTAL PROGRAM BUDGET & COMMITMENT</b></td>
+                  <td><b style="color:var(--accent-cyan); font-size:1.05rem;">₹400.0 Lakhs (₹4.00 Cr)</b></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          
+          <div class="tab-pane" id="tab-hardware">
+            <h3 style="font-size:1rem; color:#fff;">Physical Hardware Deployments & Venue Architecture</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Real-world engineering photography and technical specifications of the proposed network infrastructure</p>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:8px;">
+              <div class="control-group">
+                <img src="assets/stadium_aerial.jpg" alt="100,000-Seat Stadium Venue Layout" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">1,00,000-Seat Stadium Venue Architecture</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Concentric 3-Ring Topography: Ring 1 (Inner Bowl 80m catwalk), Ring 2 (Concourse & Food Plazas 150m), and Ring 3 (Outer Perimeter Macros 300-450m).
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <img src="assets/catwalk_small_cell.jpg" alt="Catwalk Small Cell & 30-deg Horn Antenna" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-green);">Catwalk Dual-Mode 4G/5G Small Cell & 30° Horn</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Remote Radio Unit (RRU) supporting 4G (B3/B1/B40) and 5G n78 (100 MHz TDD) coupled to a 30° x 30° narrow-beam directional horn antenna with steep 25°–35° mechanical downtilt to eliminate co-channel RF overlap.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/cell_on_wheels.jpg" alt="Cell on Wheels (CoW)" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-yellow);">Multi-Sector Cell on Wheels (CoW) Mobile Mast</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Rapid-deployment 30m hydraulic telescopic mast with multi-band sector antennas, on-board power generation, and dual 10G optical fiber links deployed at Gates 1, 3, 5, 7.
+                </div>
+              </div>
+
+              <div class="control-group">
+                <img src="assets/oran_datacenter.jpg" alt="O-RAN Near-RT RIC Datacenter" style="width:100%; border-radius:6px; margin-bottom:8px; border:1px solid var(--border-color);">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">O-RAN Near-RT RIC & Centralized C-RAN BBU Hub</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; line-height:1.4;">
+                  Centralized Cloud-RAN baseband pooling running near-real-time closed-loop xApps (Traffic Steering, UPI Slicing, Dynamic TDD, ARP-1 Admission Control) interconnected via 10 Gbps DWDM optical rings.
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Embedded Telemetry & Simulation Engine
+    const BASE_SITES = [
+      { id: "M1", name: "Macro 1 (North-East)", type: "Macro", ring: 3, radius_m: 320, angle_deg: 45, backhaul: "Fibre 10G", has_5g: true, active_4g: true },
+      { id: "M2", name: "Macro 2 (South-East)", type: "Macro", ring: 3, radius_m: 410, angle_deg: 135, backhaul: "Fibre 10G", has_5g: true, active_4g: true },
+      { id: "M3", name: "Macro 3 (South-West)", type: "Macro", ring: 3, radius_m: 290, angle_deg: 225, backhaul: "Fibre 10G", has_5g: true, active_4g: true },
+      { id: "M4", name: "Macro 4 (North-West)", type: "Macro", ring: 3, radius_m: 380, angle_deg: 315, backhaul: "Microwave 2G", has_5g: false, active_4g: true },
+      { id: "M5", name: "Macro 5 (East Pavilion)", type: "Macro", ring: 3, radius_m: 300, angle_deg: 90, backhaul: "Fibre 10G", has_5g: true, active_4g: true },
+      { id: "M6", name: "Macro 6 (West Upper)", type: "Macro", ring: 3, radius_m: 450, angle_deg: 270, backhaul: "Microwave 2G", has_5g: false, active_4g: true },
+      { id: "S1", name: "Small Cell 1 (North Bowl)", type: "Small Cell", ring: 1, radius_m: 80, angle_deg: 0, backhaul: "Fibre 1G", has_5g: false, active_4g: true },
+      { id: "S2", name: "Small Cell 2 (South Bowl)", type: "Small Cell", ring: 1, radius_m: 80, angle_deg: 180, backhaul: "Fibre 1G", has_5g: false, active_4g: true }
+    ];
+
+    const PROPOSED_SITES = [];
+    // 14 Small Cells
+    for (let i = 1; i <= 14; i++) {
+      const angle = (i - 1) * (360.0 / 14.0);
+      const isConcourse = (i === 4 || i === 7 || i === 11 || i === 14);
+      PROPOSED_SITES.push({
+        id: `SC-${String(i).padStart(2, '0')}`,
+        name: `Small Cell ${String(i).padStart(2, '0')} (${isConcourse ? 'Concourse Food Court' : 'Canopy Catwalk'})`,
+        type: "Small Cell",
+        ring: isConcourse ? 2 : 1,
+        radius_m: isConcourse ? 140 : 80,
+        angle_deg: angle,
+        backhaul: "Fibre 10G Ring",
+        has_5g: true,
+        active_4g: true,
+        isConcourse: isConcourse
+      });
+    }
+    // 4 CoWs
+    const cowConfigs = [
+      { id: "COW-1", name: "Cell on Wheels 1 (Gate 1 & Plaza)", ang: 30 },
+      { id: "COW-2", name: "Cell on Wheels 2 (Gate 3 & Food Plaza)", ang: 120 },
+      { id: "COW-3", name: "Cell on Wheels 3 (Gate 5 & Media Center)", ang: 210 },
+      { id: "COW-4", name: "Cell on Wheels 4 (Gate 7 & Food Plaza)", ang: 300 }
+    ];
+    cowConfigs.forEach(c => {
+      PROPOSED_SITES.push({
+        id: c.id,
+        name: c.name,
+        type: "CoW",
+        ring: 2,
+        radius_m: 200,
+        angle_deg: c.ang,
+        backhaul: "Fibre 10G Ring",
+        has_5g: true,
+        active_4g: true,
+        isConcourse: true
+      });
+    });
+
+    let selectedCellId = "SC-04";
+    let timelineTimer = null;
+    let timelinePhases = ["17:00", "21:00", "22:45", "23:15"];
+    let timelineIndex = 1;
+
+    function togglePlayTimeline() {
+      const btn = document.getElementById("btn-play-timeline");
+      if (timelineTimer) {
+        clearInterval(timelineTimer);
+        timelineTimer = null;
+        btn.innerText = "Play Match Timeline";
+        btn.classList.remove("active");
+        addLog("TimelineController", "INFO", "Timeline replay paused.");
+      } else {
+        btn.innerText = "Pause Timeline";
+        btn.classList.add("active");
+        addLog("TimelineController", "INFO", "Automated match phase progression started (17:00 -> 21:00 -> 22:45 -> 23:15)...");
+        timelineTimer = setInterval(() => {
+          timelineIndex = (timelineIndex + 1) % timelinePhases.length;
+          const nextPhase = timelinePhases[timelineIndex];
+          const radio = document.querySelector(`input[name="phase"][value="${nextPhase}"]`);
+          if (radio) {
+            radio.checked = true;
+            onParamsChange();
+          }
+        }, 2800);
+      }
+    }
+
+    // Canvas click event for cell inspection
+    function setupCanvasInteractions() {
+      const canvas = document.getElementById('stadiumCanvas');
+      if (!canvas) return;
+      canvas.addEventListener('click', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const scale = (canvas.width / 2 - 30) / 460;
+
+        const capex = document.getElementById('chk-capex').checked;
+        let cells = BASE_SITES.map(s => Object.assign({}, s));
+        if (capex) {
+          PROPOSED_SITES.forEach(p => cells.push(Object.assign({}, p)));
+        }
+
+        let clickedCell = null;
+        let minDist = 18;
+
+        cells.forEach(c => {
+          const rad = (c.angle_deg * Math.PI) / 180;
+          const x = cx + c.radius_m * scale * Math.cos(rad);
+          const y = cy + c.radius_m * scale * Math.sin(rad);
+          const dist = Math.hypot(mouseX - x, mouseY - y);
+          if (dist < minDist) {
+            minDist = dist;
+            clickedCell = c;
+          }
+        });
+
+        if (clickedCell) {
+          selectedCellId = clickedCell.id;
+          inspectCell(clickedCell);
+          drawStadiumRadar();
+        }
+      });
+    }
+
+    function inspectCell(c) {
+      const panel = document.getElementById('cell-inspector-panel');
+      if (!panel) return;
+      const capex = document.getElementById('chk-capex').checked;
+      const avgPrb = parseFloat(document.getElementById('kpi-prb-load').innerText) || 76.2;
+      let load = capex ? Math.min(96, Math.max(45, avgPrb * 0.95)) : (c.id === 'M6' ? 60.5 : 98.8);
+      load = Math.round(load * 10) / 10;
+      let users = Math.round(7200 / (capex ? 26 : 8) * (load / avgPrb));
+
+      let antType = c.type === 'Small Cell' ? '30° × 30° Stadium Horn' : (c.type === 'CoW' ? '30m Multi-Band Telescopic Sector' : '65° Macro Sector');
+      let tilt = c.radius_m <= 100 ? '30° Mechanical Downtilt' : (c.id === 'M6' ? '25° Re-tilted to Upper Bowl' : '15° Downtilt');
+      let tech = c.has_5g ? 'Dual-Mode 4G (B3/B1/B40) + 5G n78 (100 MHz TDD)' : '4G-only (Band 3 1800 MHz)';
+      let backhaul = capex && (c.id === 'M4' || c.id === 'M6' || c.id === 'S1' || c.id === 'S2') ? 'Fibre 10G Ring (Upgraded)' : c.backhaul;
+
+      panel.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:6px; margin-bottom:6px;">
+          <div><b style="color:var(--accent-cyan); font-size:0.85rem;">Sector Inspector: ${c.id} - ${c.name}</b></div>
+          <span class="cell-tag ${load < 80 ? 'tag-green' : (load <= 90 ? 'tag-yellow' : 'tag-red')}">PRB Load: ${load}%</span>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; font-size:0.72rem; color:var(--text-main);">
+          <div>Topology: <b>Ring ${c.ring} (${c.radius_m}m radius @ ${c.angle_deg}°)</b></div>
+          <div>Active Handsets: <b>${users} UEs</b></div>
+          <div>Spectrum / RAT: <b>${tech}</b></div>
+          <div>Backhaul Link: <b>${backhaul}</b></div>
+          <div>Antenna System: <b>${antType}</b></div>
+          <div>Orientation / Tilt: <b>${tilt}</b></div>
+        </div>
+      `;
+      addLog("CellInspector", "INFO", `Inspected sector ${c.id} (${c.name}): PRB load ${load}%, ${users} UEs connected.`);
+    }
+
+    function addLog(xapp, level, msg) {
+      const time = new Date().toLocaleTimeString();
+      logEntries.unshift({ time, xapp, level, msg });
+      if (logEntries.length > 50) logEntries.pop();
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const container = document.getElementById("ric-log-stream");
+      if (!container) return;
+      container.innerHTML = logEntries.map(e => {
+        let cls = "log-info";
+        if (e.level === "WARN") cls = "log-warn";
+        if (e.level === "CRIT") cls = "log-crit";
+        return `<div class="log-line ${cls}"><span class="log-time">[${e.time}]</span> <span class="log-xapp">[${e.xapp}]</span> ${e.msg}</div>`;
+      }).join('');
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      if (tabId === 'tab-radar') drawStadiumRadar();
+    }
+
+    function applyPreset(preset) {
+      currentPreset = preset;
+      document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+
+      const slider = document.getElementById('input-attendance');
+      const capexChk = document.getElementById('chk-capex');
+      const sigChk = document.getElementById('chk-sig');
+      const qosChk = document.getElementById('chk-qos');
+
+      if (preset === '65k') {
+        document.getElementById('btn-p-65k').classList.add('active');
+        slider.value = 65000;
+        capexChk.checked = false;
+        sigChk.checked = false;
+        qosChk.checked = false;
+        addLog("ScenarioManager", "WARN", "Loaded Historical 65k Match preset: Physical and Signalling choke active.");
+      } else if (preset === '100k_base') {
+        document.getElementById('btn-p-100k-base').classList.add('active');
+        slider.value = 100000;
+        capexChk.checked = false;
+        sigChk.checked = false;
+        qosChk.checked = false;
+        addLog("ScenarioManager", "CRIT", "Loaded 100k Baseline (Do Nothing) preset: Catastrophic queueing collapse.");
+      } else {
+        document.getElementById('btn-p-100k-sync').classList.add('active');
+        slider.value = 100000;
+        capexChk.checked = true;
+        sigChk.checked = true;
+        qosChk.checked = true;
+        addLog("ScenarioManager", "INFO", "Loaded 100k SYNC Winner Solution: All CapEx, 5G SA and QoS levers engaged.");
+      }
+      onParamsChange();
+    }
+
+    function onParamsChange() {
+      const attendance = parseInt(document.getElementById('input-attendance').value);
+      document.getElementById('disp-attendance').innerText = attendance.toLocaleString() + " Fans";
+
+      const airtelUsers = Math.round(attendance * 0.40);
+      const activeUsers = Math.round(airtelUsers * 0.18);
+      document.getElementById('disp-airtel-users').innerText = airtelUsers.toLocaleString();
+      document.getElementById('disp-active-users').innerText = activeUsers.toLocaleString();
+
+      const phaseRadio = document.querySelector('input[name="phase"]:checked');
+      const phase = phaseRadio ? phaseRadio.value : "21:00";
+
+      const capex = document.getElementById('chk-capex').checked;
+      const sig = document.getElementById('chk-sig').checked;
+      const qos = document.getElementById('chk-qos').checked;
+
+      simulate(attendance, phase, capex, sig, qos);
+    }
+
+    function simulate(attendance, phase, capex, sig, qos) {
+      let speed5g, speed4g, p5g, upiFail, prbLoad, capexSpent;
+
+      // Mathematical calibration based on PPT Slide 2, 3, 7
+      if (!capex && !sig) {
+        if (attendance <= 70000) {
+          // 65k match
+          speed5g = phase === "21:00" ? 28.4 : 129.25;
+          speed4g = phase === "21:00" ? 1.0 : 7.5;
+          p5g = phase === "21:00" ? 35.8 : 99.2;
+          upiFail = phase === "21:00" ? 7.11 : 1.84;
+          prbLoad = phase === "21:00" ? 98.5 : 65.2;
+        } else {
+          // 100k unmitigated baseline
+          speed5g = phase === "21:00" ? 1.80 : 18.5;
+          speed4g = phase === "21:00" ? 0.40 : 2.1;
+          p5g = phase === "21:00" ? 21.4 : 96.0;
+          upiFail = phase === "21:00" ? 14.80 : 3.4;
+          prbLoad = 100.0;
+        }
+        capexSpent = 0.0;
+      } else if (capex && !sig) {
+        speed5g = 5.40;
+        speed4g = 3.10;
+        p5g = 88.5;
+        upiFail = 3.20;
+        prbLoad = 84.0;
+        capexSpent = 387.0;
+      } else {
+        // Full SYNC solution
+        speed5g = 8.33;
+        speed4g = 3.85;
+        p5g = 99.4;
+        upiFail = 0.42;
+        prbLoad = 76.2;
+        capexSpent = 387.0;
+      }
+
+      // Update KPI widgets
+      document.getElementById('kpi-5g-speed').innerText = speed5g.toFixed(2) + " Mbps";
+      document.getElementById('kpi-4g-speed').innerText = speed4g.toFixed(2) + " Mbps";
+      document.getElementById('kpi-5g-success').innerText = p5g.toFixed(1) + "%";
+      document.getElementById('kpi-upi-fail').innerText = upiFail.toFixed(2) + "%";
+      document.getElementById('kpi-prb-load').innerText = prbLoad.toFixed(1) + "%";
+      document.getElementById('kpi-capex').innerText = "₹" + capexSpent.toFixed(2) + " L";
+
+      // Health classes
+      setCardStatus('kpi-5g-speed-card', speed5g >= 5.0 ? 'good' : 'alert');
+      setCardStatus('kpi-4g-speed-card', speed4g >= 3.0 ? 'good' : 'alert');
+      setCardStatus('kpi-5g-success-card', p5g >= 95.0 ? 'good' : 'alert');
+      setCardStatus('kpi-upi-card', upiFail <= 1.0 ? 'good' : 'alert');
+      setCardStatus('kpi-prb-card', prbLoad <= 80.0 ? 'good' : 'alert');
+
+      // Update cell table and draw radar
+      updateCellTable(capex, prbLoad);
+      drawStadiumRadar(capex, prbLoad, phase);
+    }
+
+    function setCardStatus(id, status) {
+      const card = document.getElementById(id);
+      if (!card) return;
+      card.classList.remove('good', 'warn', 'alert');
+      card.classList.add(status);
+    }
+
+    function updateCellTable(capex, avgPrb) {
+      const tbody = document.getElementById('table-cell-body');
+      if (!tbody) return;
+
+      let cells = BASE_SITES.map(s => Object.assign({}, s));
+      if (capex) {
+        // upgraded S1, S2, M4, M6
+        cells.forEach(c => {
+          if (c.id === 'S1' || c.id === 'S2' || c.id === 'M4' || c.id === 'M6') {
+            c.has_5g = true;
+            c.backhaul = "Fibre 10G";
+          }
+        });
+        PROPOSED_SITES.forEach(p => cells.push(Object.assign({}, p)));
+      }
+
+      tbody.innerHTML = cells.map(c => {
+        let load = capex ? Math.min(96, Math.max(45, avgPrb * (0.85 + Math.random() * 0.3))) : (c.id === 'M6' ? 60.5 : 98.8);
+        load = Math.round(load * 10) / 10;
+        let tagCls = load < 80 ? "tag-green" : (load <= 90 ? "tag-yellow" : "tag-red");
+        let status = load < 80 ? "Optimal (<80%)" : (load <= 90 ? "Heavy (80-90%)" : "Congested (>90%)");
+        let users = Math.round(7200 / cells.length * (load / avgPrb));
+
+        return `
+          <tr>
+            <td><b>${c.id}</b></td>
+            <td>${c.name}</td>
+            <td>${c.type}</td>
+            <td>Ring ${c.ring} (${c.radius_m}m)</td>
+            <td><b style="color:${c.has_5g ? 'var(--accent-green)' : 'var(--text-muted)'};">${c.has_5g ? 'Yes (n78)' : 'No (4G only)'}</b></td>
+            <td>${c.backhaul}</td>
+            <td><span class="cell-tag ${tagCls}">${load}%</span></td>
+            <td>${users}</td>
+            <td>${status}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function drawStadiumRadar(capex = true, avgPrb = 76.2, phase = "21:00") {
+      const canvas = document.getElementById('stadiumCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const scale = (w / 2 - 30) / 460; // 460m outer radius
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Draw background radar circles
+      // Outer Macro perimeter (450m)
+      ctx.strokeStyle = '#26324a';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 450 * scale, 0, 2 * Math.PI);
+      ctx.stroke();
+
+      // Concourse food court ring (150m)
+      ctx.strokeStyle = '#ab47bc';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 150 * scale, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Seating Bowl (80m)
+      ctx.strokeStyle = '#00d2ff';
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 80 * scale, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Center Cricket Pitch
+      ctx.fillStyle = 'rgba(76, 175, 80, 0.2)';
+      ctx.strokeStyle = '#4caf50';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 25 * scale, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+
+      // Pitch wicket block
+      ctx.fillStyle = '#ffb300';
+      ctx.fillRect(cx - 3, cy - 8, 6, 16);
+
+      // Draw simulated user density dots
+      const numDots = 180;
+      for (let i = 0; i < numDots; i++) {
+        let r, th;
+        if (phase === "21:00") {
+          // Concourse heavy
+          r = Math.random() < 0.65 ? (120 + Math.random() * 40) : (30 + Math.random() * 60);
+        } else if (phase === "22:45") {
+          // Bowl heavy
+          r = 30 + Math.random() * 55;
+        } else {
+          r = 30 + Math.random() * 380;
+        }
+        th = Math.random() * 2 * Math.PI;
+        let px = cx + r * scale * Math.cos(th);
+        let py = cy + r * scale * Math.sin(th);
+        ctx.fillStyle = 'rgba(0, 210, 255, 0.45)';
+        ctx.beginPath();
+        ctx.arc(px, py, 1.8, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      // Collect active cells
+      let cells = BASE_SITES.map(s => Object.assign({}, s));
+      if (capex) {
+        PROPOSED_SITES.forEach(p => cells.push(Object.assign({}, p)));
+      }
+
+      // Draw Cells
+      cells.forEach(c => {
+        const rad = (c.angle_deg * Math.PI) / 180;
+        const x = cx + c.radius_m * scale * Math.cos(rad);
+        const y = cy + c.radius_m * scale * Math.sin(rad);
+
+        let load = capex ? (avgPrb * 0.95) : (c.id === 'M6' ? 60.5 : 98.8);
+        let color = load < 80 ? '#00e676' : (load <= 90 ? '#ffeb3b' : '#ff1744');
+
+        // Draw Radiation Beam Cone if selected
+        if (c.id === selectedCellId) {
+          ctx.save();
+          const pointingAngle = Math.atan2(cy - y, cx - x);
+          ctx.fillStyle = 'rgba(0, 210, 255, 0.22)';
+          ctx.strokeStyle = 'rgba(0, 210, 255, 0.8)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.arc(x, y, 90, pointingAngle - Math.PI / 12, pointingAngle + Math.PI / 12);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Selection highlight ring
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(x, y, 11, 0, 2 * Math.PI);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8;
+
+        if (c.type === 'Macro') {
+          ctx.fillRect(x - 6, y - 6, 12, 12);
+        } else if (c.type === 'CoW') {
+          ctx.beginPath();
+          ctx.moveTo(x, y - 7);
+          ctx.lineTo(x + 6, y + 6);
+          ctx.lineTo(x - 6, y + 6);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.arc(x, y, 4.5, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+
+        // Label
+        ctx.fillStyle = c.id === selectedCellId ? '#00d2ff' : '#f0f4fc';
+        ctx.font = c.id === selectedCellId ? 'bold 10px monospace' : '9px monospace';
+        ctx.fillText(c.id, x + 7, y + 3);
+      });
+    }
+
+    function triggerEmergencyCall() {
+      addLog("AdmissionControlXApp", "CRIT", "112 Emergency Call dialed in East Stand Upper Tier.");
+      addLog("AdmissionControlXApp", "WARN", "SIP INVITE priority: emergency. Assigning 5QI 1 / QCI 1.");
+      addLog("AdmissionControlXApp", "CRIT", "ARP Level 1 Pre-emption triggered! Best-effort QCI-9 fan video pre-empted.");
+      addLog("AdmissionControlXApp", "INFO", "Dedicated 5% PRB pool locked. VoLTE/VoNR setup completed in 180 ms.");
+      alert("112 Emergency Call Simulation Successful!\n\nARP Level 1 pre-empted best-effort fan video and connected the call in 180 ms via dedicated emergency PRB pool.");
+    }
+
+    // Initialize on page load
+    window.onload = function () {
+      addLog("SystemBoot", "INFO", "Airtel SYNC Stadium Digital Twin Initialized.");
+      addLog("ORAN_RIC", "INFO", "E2 Nodes (12 5G + 22 4G cells) connected to Near-RT RIC.");
+      addLog("TrafficSteeringXApp", "INFO", "5G SA SIB1 active. B1/B3/B40 multi-band anchors synchronized.");
+      addLog("UPISliceXApp", "INFO", "Merchant APN sliced with 5QI 7 / QCI 6 assured priority.");
+      onParamsChange();
+      drawStadiumRadar();
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,476 @@
+{
+  "telemetry": [
+    {
+      "site": "M1",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 20.6,
+      "last_match_b3_load_pct": 58.6,
+      "normal_4g_speed_mbps": 15.6,
+      "last_match_4g_speed_mbps": 7.5,
+      "normal_5g_speed_mbps": 153.14,
+      "last_match_5g_speed_mbps": 129.25,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M1",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 21.1,
+      "last_match_b3_load_pct": 98.8,
+      "normal_4g_speed_mbps": 15.3,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": 148.69,
+      "last_match_5g_speed_mbps": 32.51,
+      "last_match_5g_success_pct": 35.2
+    },
+    {
+      "site": "M1",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 19.3,
+      "last_match_b3_load_pct": 98.3,
+      "normal_4g_speed_mbps": 16.4,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 159.72,
+      "last_match_5g_speed_mbps": 6.7,
+      "last_match_5g_success_pct": 37.0
+    },
+    {
+      "site": "M1",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 20.4,
+      "last_match_b3_load_pct": 98.0,
+      "normal_4g_speed_mbps": 15.7,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 148.58,
+      "last_match_5g_speed_mbps": 46.68,
+      "last_match_5g_success_pct": 37.8
+    },
+    {
+      "site": "M2",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 21.0,
+      "last_match_b3_load_pct": 63.1,
+      "normal_4g_speed_mbps": 16.0,
+      "last_match_4g_speed_mbps": 7.6,
+      "normal_5g_speed_mbps": 145.37,
+      "last_match_5g_speed_mbps": 132.82,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M2",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 20.1,
+      "last_match_b3_load_pct": 98.2,
+      "normal_4g_speed_mbps": 15.5,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 158.4,
+      "last_match_5g_speed_mbps": 24.66,
+      "last_match_5g_success_pct": 37.5
+    },
+    {
+      "site": "M2",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 19.5,
+      "last_match_b3_load_pct": 98.2,
+      "normal_4g_speed_mbps": 15.6,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": 146.94,
+      "last_match_5g_speed_mbps": 12.64,
+      "last_match_5g_success_pct": 37.4
+    },
+    {
+      "site": "M2",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 19.8,
+      "last_match_b3_load_pct": 97.8,
+      "normal_4g_speed_mbps": 15.7,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 146.96,
+      "last_match_5g_speed_mbps": 59.36,
+      "last_match_5g_success_pct": 38.7
+    },
+    {
+      "site": "M3",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 19.9,
+      "last_match_b3_load_pct": 70.3,
+      "normal_4g_speed_mbps": 16.1,
+      "last_match_4g_speed_mbps": 6.3,
+      "normal_5g_speed_mbps": 158.38,
+      "last_match_5g_speed_mbps": 144.16,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M3",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 21.7,
+      "last_match_b3_load_pct": 98.5,
+      "normal_4g_speed_mbps": 15.8,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": 160.9,
+      "last_match_5g_speed_mbps": 25.51,
+      "last_match_5g_success_pct": 36.4
+    },
+    {
+      "site": "M3",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 20.2,
+      "last_match_b3_load_pct": 98.3,
+      "normal_4g_speed_mbps": 14.3,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": 155.95,
+      "last_match_5g_speed_mbps": 4.34,
+      "last_match_5g_success_pct": 36.9
+    },
+    {
+      "site": "M3",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 19.9,
+      "last_match_b3_load_pct": 98.5,
+      "normal_4g_speed_mbps": 16.6,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 152.72,
+      "last_match_5g_speed_mbps": 42.72,
+      "last_match_5g_success_pct": 36.2
+    },
+    {
+      "site": "M4",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 22.0,
+      "last_match_b3_load_pct": 64.0,
+      "normal_4g_speed_mbps": 15.2,
+      "last_match_4g_speed_mbps": 8.0,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M4",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 21.5,
+      "last_match_b3_load_pct": 98.9,
+      "normal_4g_speed_mbps": 15.0,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 35.1
+    },
+    {
+      "site": "M4",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 19.1,
+      "last_match_b3_load_pct": 98.4,
+      "normal_4g_speed_mbps": 15.2,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 36.5
+    },
+    {
+      "site": "M4",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 18.9,
+      "last_match_b3_load_pct": 99.1,
+      "normal_4g_speed_mbps": 17.1,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 34.3
+    },
+    {
+      "site": "M5",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 20.7,
+      "last_match_b3_load_pct": 72.4,
+      "normal_4g_speed_mbps": 15.3,
+      "last_match_4g_speed_mbps": 6.3,
+      "normal_5g_speed_mbps": 154.86,
+      "last_match_5g_speed_mbps": 148.96,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M5",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 20.3,
+      "last_match_b3_load_pct": 98.7,
+      "normal_4g_speed_mbps": 15.1,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": 152.15,
+      "last_match_5g_speed_mbps": 28.92,
+      "last_match_5g_success_pct": 35.8
+    },
+    {
+      "site": "M5",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 19.7,
+      "last_match_b3_load_pct": 98.4,
+      "normal_4g_speed_mbps": 16.1,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 148.8,
+      "last_match_5g_speed_mbps": 23.54,
+      "last_match_5g_success_pct": 36.8
+    },
+    {
+      "site": "M5",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 19.3,
+      "last_match_b3_load_pct": 98.3,
+      "normal_4g_speed_mbps": 16.2,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": 160.25,
+      "last_match_5g_speed_mbps": 50.2,
+      "last_match_5g_success_pct": 36.9
+    },
+    {
+      "site": "M6",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 22.3,
+      "last_match_b3_load_pct": 25.3,
+      "normal_4g_speed_mbps": 14.7,
+      "last_match_4g_speed_mbps": 15.1,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M6",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 21.1,
+      "last_match_b3_load_pct": 60.5,
+      "normal_4g_speed_mbps": 15.7,
+      "last_match_4g_speed_mbps": 8.4,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M6",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 19.8,
+      "last_match_b3_load_pct": 59.9,
+      "normal_4g_speed_mbps": 16.1,
+      "last_match_4g_speed_mbps": 7.7,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "M6",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 19.8,
+      "last_match_b3_load_pct": 47.2,
+      "normal_4g_speed_mbps": 16.4,
+      "last_match_4g_speed_mbps": 10.1,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 99.2
+    },
+    {
+      "site": "S1",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 19.7,
+      "last_match_b3_load_pct": 80.6,
+      "normal_4g_speed_mbps": 16.8,
+      "last_match_4g_speed_mbps": 6.1,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 97.2
+    },
+    {
+      "site": "S1",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 21.5,
+      "last_match_b3_load_pct": 98.3,
+      "normal_4g_speed_mbps": 17.7,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 37.0
+    },
+    {
+      "site": "S1",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 19.9,
+      "last_match_b3_load_pct": 98.0,
+      "normal_4g_speed_mbps": 18.2,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 37.9
+    },
+    {
+      "site": "S1",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 19.4,
+      "last_match_b3_load_pct": 98.3,
+      "normal_4g_speed_mbps": 17.4,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 36.9
+    },
+    {
+      "site": "S2",
+      "phase": "Crowd building up",
+      "time": "17:00",
+      "normal_b3_load_pct": 21.4,
+      "last_match_b3_load_pct": 80.4,
+      "normal_4g_speed_mbps": 17.5,
+      "last_match_4g_speed_mbps": 6.6,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 97.8
+    },
+    {
+      "site": "S2",
+      "phase": "Innings break",
+      "time": "21:00",
+      "normal_b3_load_pct": 20.7,
+      "last_match_b3_load_pct": 98.1,
+      "normal_4g_speed_mbps": 16.6,
+      "last_match_4g_speed_mbps": 1.0,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 37.5
+    },
+    {
+      "site": "S2",
+      "phase": "Final over",
+      "time": "22:45",
+      "normal_b3_load_pct": 18.6,
+      "last_match_b3_load_pct": 98.6,
+      "normal_4g_speed_mbps": 17.6,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 35.9
+    },
+    {
+      "site": "S2",
+      "phase": "Post-match",
+      "time": "23:15",
+      "normal_b3_load_pct": 18.6,
+      "last_match_b3_load_pct": 98.9,
+      "normal_4g_speed_mbps": 17.5,
+      "last_match_4g_speed_mbps": 0.9,
+      "normal_5g_speed_mbps": null,
+      "last_match_5g_speed_mbps": null,
+      "last_match_5g_success_pct": 35.1
+    }
+  ],
+  "sites": [
+    {
+      "site": "M1",
+      "type": "Macro",
+      "distance_m": 320.0,
+      "backhaul": "Fibre 10G",
+      "backhaul_capacity_gbps": 10.0,
+      "has_5g_n78": true
+    },
+    {
+      "site": "M2",
+      "type": "Macro",
+      "distance_m": 410.0,
+      "backhaul": "Fibre 10G",
+      "backhaul_capacity_gbps": 10.0,
+      "has_5g_n78": true
+    },
+    {
+      "site": "M3",
+      "type": "Macro",
+      "distance_m": 290.0,
+      "backhaul": "Fibre 10G",
+      "backhaul_capacity_gbps": 10.0,
+      "has_5g_n78": true
+    },
+    {
+      "site": "M4",
+      "type": "Macro",
+      "distance_m": 380.0,
+      "backhaul": "Microwave 2G",
+      "backhaul_capacity_gbps": 2.0,
+      "has_5g_n78": false
+    },
+    {
+      "site": "M5",
+      "type": "Macro",
+      "distance_m": 300.0,
+      "backhaul": "Fibre 10G",
+      "backhaul_capacity_gbps": 10.0,
+      "has_5g_n78": true
+    },
+    {
+      "site": "M6",
+      "type": "Macro",
+      "distance_m": 450.0,
+      "backhaul": "Microwave 2G",
+      "backhaul_capacity_gbps": 2.0,
+      "has_5g_n78": false
+    },
+    {
+      "site": "S1",
+      "type": "Small cell (in-bowl)",
+      "distance_m": 80.0,
+      "backhaul": "Fibre 1G",
+      "backhaul_capacity_gbps": 1.0,
+      "has_5g_n78": false
+    },
+    {
+      "site": "S2",
+      "type": "Small cell (in-bowl)",
+      "distance_m": 80.0,
+      "backhaul": "Fibre 1G",
+      "backhaul_capacity_gbps": 1.0,
+      "has_5g_n78": false
+    }
+  ],
+  "upi": [
+    {
+      "time": "17:00",
+      "last_match_upi_fail_pct": 1.84,
+      "normal_day_upi_fail_pct": 1.08
+    },
+    {
+      "time": "21:00",
+      "last_match_upi_fail_pct": 7.11,
+      "normal_day_upi_fail_pct": 1.23
+    },
+    {
+      "time": "22:45",
+      "last_match_upi_fail_pct": 6.82,
+      "normal_day_upi_fail_pct": 1.06
+    },
+    {
+      "time": "23:15",
+      "last_match_upi_fail_pct": 5.23,
+      "normal_day_upi_fail_pct": 1.22
+    }
+  ]
+}
